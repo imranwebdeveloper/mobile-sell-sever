@@ -1,9 +1,7 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-// import { Cat, CatDocument } from './schemas/';
-// import { CreateCatDto } from './dto/create-cat.dto';
-import { Mobile, MobileDocument } from './Schema/mobile.schema';
+import { Mobile, MobileDocument } from './schema/mobile.schema';
 import { MobileDto } from './dto/mobile.dto';
 
 @Injectable()
@@ -28,7 +26,9 @@ export class MobileService {
   /**
    * This function give all mobile list items
    *
-   * Example: Apple, Samsung,
+   * Example:
+   *
+   * Apple, Samsung,
    *
    */
 
@@ -40,13 +40,4 @@ export class MobileService {
       console.log(error.message);
     }
   }
-
-  // async getAllMobile(): Promise<any> {
-  //   try {
-  //     const doc = await this.mobileModel.find({});
-  //     return doc;
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // }
 }
