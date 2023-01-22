@@ -89,8 +89,6 @@ export class Mobile {
   inTheBox: [];
   @Prop()
   imgUrl: String;
-  @Prop()
-  timestamps: true;
 }
 
 export const MobileSchema = SchemaFactory.createForClass(Mobile);
