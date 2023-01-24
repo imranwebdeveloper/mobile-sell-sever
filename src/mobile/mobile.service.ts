@@ -40,4 +40,22 @@ export class MobileService {
       console.log(error.message);
     }
   }
+
+  /**
+   *
+   * This is function used to query the name of all individual mobile model devices
+   *
+   * example :  Samsung
+   */
+
+  async getMobileByBrand(brand: string): Promise<any> {
+    const brandName = brand.charAt(0).toUpperCase() + brand.slice(1);
+
+    try {
+      const doc = await this.mobileModel.find({ brandName });
+      return doc;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 }
