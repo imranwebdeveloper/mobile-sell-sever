@@ -70,7 +70,7 @@ export class MobileService {
     try {
       const variant = await this.mobileModel
         .findById({ _id })
-        .select('variant');
+        .select(['variant', 'brandName', 'model', 'imgUrl']);
 
       return variant;
     } catch (error) {
