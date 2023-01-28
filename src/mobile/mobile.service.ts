@@ -77,4 +77,15 @@ export class MobileService {
       console.log(error.message);
     }
   }
+
+  async updateValue<T>(id: string, field: string, newValue: T): Promise<any> {
+    try {
+      return this.mobileModel.updateOne(
+        { _id: id },
+        { $set: { [field]: newValue } },
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 }

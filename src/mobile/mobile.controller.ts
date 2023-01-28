@@ -7,12 +7,17 @@ import {
   Req,
   Param,
   NotFoundException,
+  Patch,
+  ValidationPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { MobileDto } from './dto/mobile.dto';
+import { VariantDto } from './dto/variant.dto';
 import { MobileService } from './mobile.service';
 
 @Controller('mobile')
+@UsePipes(new ValidationPipe({ transform: true }))
 export class MobileController {
   constructor(private readonly mobileService: MobileService) {}
 
@@ -90,6 +95,26 @@ export class MobileController {
     try {
       const variant = await this.mobileService.findVariantById(id);
       return res.json({ status: 200, message: 'success', data: variant });
+    } catch (error) {
+      console.log(error.message);
+      return res.status(500).json({ status: 500, message: 'error' });
+    }
+  }
+
+  /**
+   *
+   * This request updates mobile price as variations
+   *
+   */
+  @Patch('/price/:id')
+  async updateMobilePrice(
+    @Res() res: Response,
+    @Param() { id }: { id: string },
+    @Body() variant: VariantDto[],
+  ) {
+    try {
+      const doc = await this.mobileService.updateValue(id, 'variant', variant);
+      return res.json({ status: 200, message: 'success', data: doc });
     } catch (error) {
       console.log(error.message);
       return res.status(500).json({ status: 500, message: 'error' });
