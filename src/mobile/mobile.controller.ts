@@ -37,7 +37,7 @@ export class MobileController {
   }
   /**
    *
-   * This is dynamic route for using to get individual brand mobile devices
+   * This is dynamic route for using to provide individual brand mobile devices
    *
    * Route : /mobile/samsung
    *
@@ -62,7 +62,6 @@ export class MobileController {
   /**
    *
    * Route: /mobile/new-mobile
-   *
    * This function is created a new mobile document
    *
    */
@@ -71,6 +70,26 @@ export class MobileController {
     try {
       const data = await this.mobileService.saveNewMobile(mobileDto);
       return res.json({ status: 200, message: 'success', data });
+    } catch (error) {
+      console.log(error.message);
+      return res.status(500).json({ status: 500, message: 'error' });
+    }
+  }
+
+  /**
+   *
+   * this function only provide variants of the mobile document by id
+   * Route : mobile/variant/:id
+   */
+
+  @Get('/variant/:id')
+  async getMobileVariantById(
+    @Res() res: Response,
+    @Param() { id }: { id: string },
+  ) {
+    try {
+      const variant = await this.mobileService.findVariantById(id);
+      return res.json({ status: 200, message: 'success', data: variant });
     } catch (error) {
       console.log(error.message);
       return res.status(500).json({ status: 500, message: 'error' });

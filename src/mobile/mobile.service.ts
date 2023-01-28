@@ -43,9 +43,9 @@ export class MobileService {
 
   /**
    *
-   * This is function used to query the name of all individual mobile model devices
+   * This is function used to get all individual mobile model devices
    *
-   * example :  Samsung
+   * example :  Samsung all devices
    */
 
   async getMobileByBrand(brand: string): Promise<any> {
@@ -54,6 +54,25 @@ export class MobileService {
     try {
       const doc = await this.mobileModel.find({ brandName });
       return doc;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  /**
+   *
+   * this function only provide variants of the mobile document by id
+   * @param {string} _id
+   * @returns :  [{ram:12, rom:64, offical:25000, unofficial:22000}]
+   */
+
+  async findVariantById(_id: string) {
+    try {
+      const variant = await this.mobileModel
+        .findById({ _id })
+        .select('variant');
+
+      return variant;
     } catch (error) {
       console.log(error.message);
     }
