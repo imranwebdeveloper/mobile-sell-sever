@@ -10,6 +10,7 @@ import {
   Patch,
   ValidationPipe,
   UsePipes,
+  Put,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { MobileDto } from './dto/mobile.dto';
@@ -106,7 +107,7 @@ export class MobileController {
    * This request updates mobile price as variations
    *
    */
-  @Patch('/price/:id')
+  @Put('/price/:id')
   async updateMobilePrice(
     @Res() res: Response,
     @Param() { id }: { id: string },
