@@ -19,13 +19,16 @@ async function bootstrap() {
   //   allowedHeaders: '*',
   //   origin: '*',
   // });
-  // app.enableCors();
+  app.enableCors();
   // app.enableCors({
   //   credentials: true,
   //   origin: ['http://localhost:3000', 'https://mobile-sell.vercel.app'],
   //   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
   // });
-  app.enableCors();
+  // app.enableCors({
+  //   origin: '*',
+  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  // });
   await app.listen(process.env.PORT || 3001);
 }
 bootstrap();
