@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Mobile, MobileDocument } from './schema/mobile.schema';
+import { Mobile, MobileDocument } from './schema/mobile';
 import { MobileDto } from './dto/mobile.dto';
 
 @Injectable()
