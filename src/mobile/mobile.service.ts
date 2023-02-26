@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Mobile, MobileDocument } from './schema/mobile';
+import { Mobile, MobileDocument } from '../schema/mobile';
 import { MobileDto } from './dto/mobile.dto';
 
 @Injectable()
@@ -68,13 +68,12 @@ export class MobileService {
 
   async findVariantById(_id: string) {
     try {
-      const variant = await this.mobileModel
-        .findById({ _id })
-        .select(['variant', 'brandName', 'model', 'imgUrl']);
-
-      return variant;
+      return await this.mobileModel.findById({ _id });
     } catch (error) {
-      console.log(error.message);
+      throw new HttpException(
+        `Document with id ${_id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
 

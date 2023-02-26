@@ -11,6 +11,8 @@ import {
   ValidationPipe,
   UsePipes,
   Put,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { MobileDto } from './dto/mobile.dto';
@@ -93,13 +95,8 @@ export class MobileController {
     @Res() res: Response,
     @Param() { id }: { id: string },
   ) {
-    try {
-      const variant = await this.mobileService.findVariantById(id);
-      return res.json({ status: 200, message: 'success', data: variant });
-    } catch (error) {
-      console.log(error.message);
-      return res.status(500).json({ status: 500, message: 'error' });
-    }
+    const variant = await this.mobileService.findVariantById(id);
+    return res.json({ status: 200, message: 'success', data: variant });
   }
 
   /**
@@ -113,12 +110,7 @@ export class MobileController {
     @Param() { id }: { id: string },
     @Body() variant: VariantDto[],
   ) {
-    try {
-      const doc = await this.mobileService.updateValue(id, 'variant', variant);
-      return res.json({ status: 200, message: 'success', data: doc });
-    } catch (error) {
-      console.log(error.message);
-      return res.status(500).json({ status: 500, message: 'error' });
-    }
+    const doc = await this.mobileService.updateValue(id, 'variant', variant);
+    return res.json({ status: 200, message: 'success', data: doc });
   }
 }
