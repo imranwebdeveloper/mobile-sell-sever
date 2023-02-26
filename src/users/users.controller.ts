@@ -11,26 +11,23 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserValidationPipe } from '../pipes/user-validation.pipe';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  async create(@Body(new UserValidationPipe()) createUserDto: CreateUserDto) {
-    const doc = await this.usersService.create(createUserDto);
-    return { status: 'success', data: doc };
+  @Post('register')
+  async register(@Body(new UserValidationPipe()) createUserDto: CreateUserDto) {
+    const token = await this.usersService.create(createUserDto);
+    return { status: 'success', token };
   }
-
-  @Get()
-  findAll() {
-    // return this.usersService.findAll();
-    return 'users.json';
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  @Post('login')
+  async login(
+    @Body(new UserValidationPipe()) loginUserDto: LoginUserDto,
+  ): Promise<any> {
+    const token = await this.usersService.login(loginUserDto);
+    return { status: 'success', token };
   }
 
   @Patch(':id')

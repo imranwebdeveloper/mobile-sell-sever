@@ -8,13 +8,20 @@ import { HttpExceptionFilter } from './filter/http-exception.filter';
 import { MobileModule } from './mobile/mobile.module';
 import { Mobile, MobileSchema } from './schema/mobile';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
+import configuration from './store/config/configuration';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      // load: [configuration],
+      // isGlobal: true,
+    }),
     MongooseModule.forRoot(process.env.DB),
     MobileModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [

@@ -6,15 +6,15 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({ timestamps: true, validateBeforeSave: true })
 export class User {
-  @Prop({ required: true, max: 18, min: 4 })
+  @Prop({ required: true, max: 18, min: 4, trim: true })
   firstName: string;
-  @Prop({ required: true, max: 18, min: 4 })
+  @Prop({ required: true, max: 18, min: 4, trim: true })
   lastName: string;
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true, unique: true, trim: true })
   email: string;
-  @Prop({ required: true, max: 18, min: 8 })
+  @Prop({ required: true, trim: true, max: 18, min: 8 })
   password: string;
-  @Prop({ enum: Role })
+  @Prop({ enum: Role, trim: true })
   role: string;
 }
 

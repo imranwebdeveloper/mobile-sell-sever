@@ -1,10 +1,4 @@
-import {
-  IsString,
-  MinLength,
-  IsEmpty,
-  IsEmail,
-  MaxLength,
-} from 'class-validator';
+import { IsString, MinLength, IsEmail, MaxLength } from 'class-validator';
 import { Role } from '../../store/enum/user-role.enum';
 export class CreateUserDto {
   @MinLength(4)
