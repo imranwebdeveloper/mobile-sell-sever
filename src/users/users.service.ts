@@ -19,22 +19,24 @@ export class UsersService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private authService: AuthService,
   ) {}
-  async create(createUserDto: CreateUserDto): Promise<string> {
+  async create(createUserDto: CreateUserDto): Promise<any> {
     try {
       const hash = await bcrypt.hash(createUserDto.password, 10);
       createUserDto.password = hash;
       const token = await this.authService.generateToken({
         email: createUserDto.email,
+        password: hash,
       });
       const model = new this.userModel(createUserDto);
-      await model.save();
-      return token;
+      const user = await model.save();
+      delete user.password;
+      return { token, user };
     } catch (error) {
       throw new BadRequestException({ validatorError: error.message });
     }
   }
 
-  async login(user: LoginUserDto): Promise<string> {
+  async login(user: LoginUserDto): Promise<any> {
     try {
       const model = await this.userModel.findOne({ email: user.email });
       const match = await bcrypt.compare(user.password, model.password);
@@ -43,8 +45,10 @@ export class UsersService {
       }
       const token = await this.authService.generateToken({
         email: model.email,
+        password: model.password,
       });
-      return token;
+      delete model.password;
+      return { token, model };
     } catch (error) {
       throw new UnauthorizedException();
     }
