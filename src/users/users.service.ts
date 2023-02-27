@@ -23,13 +23,12 @@ export class UsersService {
     try {
       const hash = await bcrypt.hash(createUserDto.password, 10);
       createUserDto.password = hash;
-      const token = await this.authService.generateToken({
-        email: createUserDto.email,
-        password: hash,
-      });
       const model = new this.userModel(createUserDto);
       const user = await model.save();
-      delete user.password;
+      const token = await this.authService.generateToken({
+        email: createUserDto.email,
+        id: user._id,
+      });
       return { token, user };
     } catch (error) {
       throw new BadRequestException({ validatorError: error.message });
@@ -40,17 +39,16 @@ export class UsersService {
     try {
       const model = await this.userModel.findOne({ email: user.email });
       const match = await bcrypt.compare(user.password, model.password);
-      if (!model || !match) {
-        throw new UnauthorizedException();
+      if (!match) {
+        throw new UnauthorizedException('credentials not valid');
       }
       const token = await this.authService.generateToken({
         email: model.email,
-        password: model.password,
+        id: model._id,
       });
-      delete model.password;
       return { token, model };
     } catch (error) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(error.message);
     }
   }
 

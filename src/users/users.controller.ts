@@ -7,12 +7,18 @@ import {
   Param,
   Delete,
   HttpCode,
+  UseGuards,
+  Req,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserValidationPipe } from '../pipes/user-validation.pipe';
 import { LoginUserDto } from './dto/login-user.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -27,7 +33,7 @@ export class UsersController {
   }
 
   @Post('login')
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   async login(
     @Body(new UserValidationPipe()) loginUserDto: LoginUserDto,
   ): Promise<any> {
@@ -35,8 +41,14 @@ export class UsersController {
     return { status: 'success', token };
   }
 
-  @Get(':id')
-  async getProfile(@Param('id') id: string): Promise<any> {}
+  // <<<<<<<<<<<<<<<< Public comments service >>>>>>>>>>>>>>>>>>>>>>>
+
+  @UseGuards(JwtAuthGuard)
+  @Post('comment')
+  async createComment(@Param('id') id: string, @Req() req): Promise<any> {
+    console.log(req.user);
+    return 'https';
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
