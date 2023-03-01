@@ -17,10 +17,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserValidationPipe } from '../pipes/user-validation.pipe';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
-import { AuthGuard } from '@nestjs/passport';
 
-@Controller('users')
+@Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -28,7 +26,7 @@ export class UsersController {
   async register(
     @Body(new UserValidationPipe()) createUserDto: CreateUserDto,
   ): Promise<any> {
-    const data = await this.usersService.create(createUserDto);
+    const data = await this.usersService.register(createUserDto);
     return { status: 'success', data };
   }
 
@@ -37,8 +35,8 @@ export class UsersController {
   async login(
     @Body(new UserValidationPipe()) loginUserDto: LoginUserDto,
   ): Promise<any> {
-    const token = await this.usersService.login(loginUserDto);
-    return { status: 'success', token };
+    const data = await this.usersService.login(loginUserDto);
+    return { status: 'success', data };
   }
 
   // <<<<<<<<<<<<<<<< Public comments service >>>>>>>>>>>>>>>>>>>>>>>

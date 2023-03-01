@@ -12,9 +12,9 @@ export class User {
   lastName: string;
   @Prop({ required: true, unique: true, trim: true })
   email: string;
-  @Prop({ required: true, trim: true, max: 18, min: 8 })
+  @Prop({ required: true, trim: true })
   password: string;
-  @Prop({ enum: Role, trim: true })
+  @Prop({ enum: Role, trim: true, default: Role.public })
   role: string;
 }
 

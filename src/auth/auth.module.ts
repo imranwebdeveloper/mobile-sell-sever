@@ -1,11 +1,7 @@
 import { Module } from '@nestjs/common';
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { UsersModule } from 'src/users/users.module';
-import { UsersService } from 'src/users/users.service';
+import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './guards/jwt.guard';
 import { JwtStrategy } from './strategy/jwt.strategy';
-
 @Module({
   imports: [
     JwtModule.registerAsync({
