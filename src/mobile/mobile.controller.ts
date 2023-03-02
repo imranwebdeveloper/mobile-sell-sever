@@ -13,11 +13,17 @@ import {
   Put,
   HttpException,
   HttpStatus,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { MobileDto } from './dto/mobile.dto';
 import { VariantDto } from './dto/variant.dto';
 import { MobileService } from './mobile.service';
+import { v4 as uuidv4 } from 'uuid';
+import { diskStorage } from 'multer';
+import { parse } from 'path';
 
 @Controller('mobile')
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -113,4 +119,25 @@ export class MobileController {
     const doc = await this.mobileService.updateValue(id, 'variant', variant);
     return res.json({ status: 200, message: 'success', data: doc });
   }
+
+  // @Post('test')
+  // @UseInterceptors(
+  //   FileInterceptor('file', {
+  //     storage: diskStorage({
+  //       destination: './public/img',
+  //       filename: (req, file, callback) => {
+  //         const fileName =
+  //           parse(file.originalname).name.split(' ').join('-') + uuidv4();
+  //         const ext = parse(file.originalname).ext;
+  //         callback(null, `${fileName}${ext}`);
+  //       },
+  //     }),
+  //   }),
+  // )
+  // async uploadFile(
+  //   @UploadedFile() file: Express.Multer.File,
+  //   @Res() res: Response,
+  // ) {
+  //   console.log(file);
+  // }
 }

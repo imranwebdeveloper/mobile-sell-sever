@@ -10,6 +10,7 @@ import { Mobile, MobileSchema } from './schema/mobile';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { CommentModule } from './comment/comment.module';
 import configuration from './store/config/configuration';
 
 @Module({
@@ -22,6 +23,7 @@ import configuration from './store/config/configuration';
     MobileModule,
     UsersModule,
     AuthModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [
