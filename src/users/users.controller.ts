@@ -14,24 +14,27 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import { CommentDto } from '../comment/dto/comment.dto';
+import { AuthService } from '../auth/auth.service';
+import { LocalAuthGuard } from '../auth/guards/auth.guard';
 
 @Controller('user')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto): Promise<any> {
-    const data = await this.usersService.register(createUserDto);
+    const data = await this.authService.register(createUserDto);
     return { status: 'success', data };
   }
 
   @Post('login')
+  @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
-  async login(@Body() loginUserDto: LoginUserDto): Promise<any> {
-    const data = await this.usersService.login(loginUserDto);
+  async login(@Req() req: any): Promise<any> {
+    const data = await this.authService.login(req.user);
     return { status: 'success', data };
   }
 

@@ -20,24 +20,11 @@ export class CommentService {
 
   async createComment(comment: any) {
     try {
-      const { firstName, lastName, _id } = await this.userModel.findOne({
-        _id: comment.user_id,
-      });
-
-      if (!_id) throw new UnauthorizedException();
-
       const isMobileModel = await this.mobileModel.findOne({
         _id: comment.model_id,
       });
-
       if (!isMobileModel) throw new BadRequestException();
-
-      const userComment = new this.commentModel({
-        ...comment,
-        firstName,
-        lastName,
-      });
-
+      const userComment = new this.commentModel(comment);
       return await userComment.save();
     } catch (error) {
       throw new NotAcceptableException(error.message);

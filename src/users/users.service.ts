@@ -10,42 +10,44 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from 'src/schema/user';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthService } from 'src/auth/auth.service';
+// import { AuthService } from 'src/auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private authService: AuthService,
+    @InjectModel(User.name) private userModel: Model<UserDocument>, // private authService: AuthService,
   ) {}
-  async register(createUserDto: CreateUserDto): Promise<any> {
+
+  async create(createUserDto: CreateUserDto) {
     try {
-      const hash = await bcrypt.hash(createUserDto.password, 10);
-      createUserDto.password = hash;
       const user = new this.userModel(createUserDto);
-      await user.save();
-      const { email, _id, role, password, ...rest } = user.toObject();
-      const token = await this.authService.generateToken({ email, _id, role });
-      return { token, user: { _id, email, role, ...rest } };
+
+      return await user.save();
     } catch (error) {
+      console.log(error.massage);
       throw new BadRequestException({ validatorError: error.message });
     }
   }
 
-  async login(user: LoginUserDto): Promise<any> {
+  async findUserByEmail(email: string) {
     try {
-      const model = await this.userModel.findOne({ email: user.email });
-      if (!model) {
-        throw new UnauthorizedException();
+      const user = await this.userModel.findOne({ email });
+      if (!user) {
+        throw new BadRequestException('Invalid credentials');
       }
-      const isMatch = await bcrypt.compare(user.password, model.password);
-      if (!isMatch) {
-        throw new UnauthorizedException('Invalid Credentials');
+      return user.toObject();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+  async findUserById(_id: string): Promise<any> {
+    try {
+      const user = await this.userModel.findOne({ _id });
+      if (!user) {
+        throw new UnauthorizedException('invalid credentials');
       }
-      const { email, _id, role, password, ...rest } = model.toObject();
-      const token = await this.authService.generateToken({ email, _id, role });
-      return { token, user: { _id, email, role, ...rest } };
+      return user.toObject();
     } catch (error) {
       throw new BadRequestException(error.message);
     }

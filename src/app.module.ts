@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,6 +12,8 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CommentModule } from './comment/comment.module';
 import configuration from './store/config/configuration';
+import { RolesGuard } from './auth/guards/role.guard';
+import { JwtStrategy } from './auth/strategy/jwt.strategy';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import configuration from './store/config/configuration';
       // load: [configuration],
       // isGlobal: true,
     }),
+
     MongooseModule.forRoot(process.env.DB),
     MobileModule,
     UsersModule,
@@ -31,6 +34,10 @@ import configuration from './store/config/configuration';
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })

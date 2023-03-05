@@ -23,5 +23,7 @@ export class Comment {
   firstName: string;
   @Prop({ required: true })
   lastName: string;
+  @Prop({ required: true })
+  email: string;
 }
 export const CommentSchema = SchemaFactory.createForClass(Comment);

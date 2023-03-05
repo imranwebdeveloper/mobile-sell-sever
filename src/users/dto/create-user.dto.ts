@@ -22,6 +22,5 @@ export class CreateUserDto {
   @MinLength(8)
   @MaxLength(18)
   password: string;
-  @IsString()
-  role: Role.public | Role.seller;
+  roles: string;
 }
