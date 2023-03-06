@@ -16,6 +16,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthService } from '../auth/auth.service';
 import { LocalAuthGuard } from '../auth/guards/auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @Controller('user')
 export class UsersController {
@@ -36,6 +37,13 @@ export class UsersController {
   async login(@Req() req: any): Promise<any> {
     const data = await this.authService.login(req.user);
     return { status: 'success', data };
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async getUserProfile(@Req() req: any): Promise<any> {
+    const { user } = await this.authService.login(req.user);
+    return { status: 'success', data: user };
   }
 
   @Patch(':id')
