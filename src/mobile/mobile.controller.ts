@@ -26,28 +26,13 @@ import { diskStorage } from 'multer';
 import { parse } from 'path';
 
 @Controller('mobile')
-@UsePipes(new ValidationPipe({ transform: true }))
 export class MobileController {
   constructor(private readonly mobileService: MobileService) {}
 
-  /**
-   *
-   * Route: /mobile/list
-   *
-   * It function returns a list of mobile devices
-   *
-   * example: Apple, Samsung
-   */
-
   @Get('list')
-  async getMobileList(@Res() res: Response) {
-    try {
-      const data = await this.mobileService.getMobileList();
-      return res.json({ status: 200, message: 'success', data });
-    } catch (error) {
-      console.log(error.message);
-      return res.status(500).json({ status: 500, message: 'error' });
-    }
+  async getAllMobileList() {
+    const data = await this.mobileService.getAllMobileList();
+    return { status: 'success', data };
   }
   /**
    *
@@ -57,21 +42,22 @@ export class MobileController {
    *
    */
 
-  @Get(':brand')
-  async getMobileModel(
-    @Param() { brand }: { brand: string },
-    @Res() res: Response,
-  ) {
-    try {
-      const models = await this.mobileService.getMobileByBrand(brand);
-      if (!models) {
-        throw new NotFoundException(`User with id ${brand} Not found`);
-      }
-      return res.json({ status: 200, message: 'success', data: models });
-    } catch (error) {
-      return res.status(500).json({ status: 500, message: 'error' });
-    }
-  }
+  // @Get(':brand')
+  // async getMobileModel(
+  //   @Param() { brand }: { brand: string },
+  //   @Res() res: Response,
+  // ) {
+
+  //   try {
+  //     const models = await this.mobileService.getMobileByBrand(brand);
+  //     if (!models) {
+  //       throw new NotFoundException(`User with id ${brand} Not found`);
+  //     }
+  //     return res.json({ status: 200, message: 'success', data: models });
+  //   } catch (error) {
+  //     return res.status(500).json({ status: 500, message: 'error' });
+  //   }
+  // }
 
   /**
    *
@@ -116,28 +102,9 @@ export class MobileController {
     @Param() { id }: { id: string },
     @Body() variant: VariantDto[],
   ) {
+    console.log('hello5');
+
     const doc = await this.mobileService.updateValue(id, 'variant', variant);
     return res.json({ status: 200, message: 'success', data: doc });
   }
-
-  // @Post('test')
-  // @UseInterceptors(
-  //   FileInterceptor('file', {
-  //     storage: diskStorage({
-  //       destination: './public/img',
-  //       filename: (req, file, callback) => {
-  //         const fileName =
-  //           parse(file.originalname).name.split(' ').join('-') + uuidv4();
-  //         const ext = parse(file.originalname).ext;
-  //         callback(null, `${fileName}${ext}`);
-  //       },
-  //     }),
-  //   }),
-  // )
-  // async uploadFile(
-  //   @UploadedFile() file: Express.Multer.File,
-  //   @Res() res: Response,
-  // ) {
-  //   console.log(file);
-  // }
 }

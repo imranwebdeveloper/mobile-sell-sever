@@ -1,5 +1,11 @@
 import { Model } from 'mongoose';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Mobile, MobileDocument } from '../schema/mobile';
 import { MobileDto } from './dto/mobile.dto';
@@ -10,9 +16,17 @@ export class MobileService {
     @InjectModel(Mobile.name) private mobileModel: Model<MobileDocument>,
   ) {}
 
-  /**
-   * This function create a new mobile document object
-   */
+  async getAllMobileList() {
+    try {
+      const doc = await this.mobileModel
+        .find()
+        .select(['brandName', 'model', 'imgUrl', 'variant', 'updatedAt']);
+      if (!doc) throw new NotFoundException('No Mobile List found');
+      return doc;
+    } catch (error) {
+      throw new BadRequestException();
+    }
+  }
 
   async saveNewMobile(mobile: MobileDto): Promise<Mobile> {
     try {
@@ -31,15 +45,6 @@ export class MobileService {
    * Apple, Samsung,
    *
    */
-
-  async getMobileList(): Promise<any> {
-    try {
-      const doc = await this.mobileModel.find().select('brandName');
-      return doc;
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
 
   /**
    *
