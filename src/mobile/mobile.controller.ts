@@ -19,11 +19,15 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { MobileDto } from './dto/mobile.dto';
-import { VariantDto } from './dto/variant.dto';
+import { VariantDto, VariantUpdateDto } from './dto/variant.dto';
 import { MobileService } from './mobile.service';
 import { v4 as uuidv4 } from 'uuid';
 import { diskStorage } from 'multer';
 import { parse } from 'path';
+import { ResType } from '../store/type/response.type';
+import { UpdateWriteOpResult } from '../store/type/document-write-result.type';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../store/enum/user-role.enum';
 
 @Controller('mobile')
 export class MobileController {
@@ -82,29 +86,26 @@ export class MobileController {
    * Route : mobile/variant/:id
    */
 
-  @Get('/variant/:id')
-  async getMobileVariantById(
-    @Res() res: Response,
+  @Get('/:id')
+  async getMobileById(
     @Param() { id }: { id: string },
-  ) {
-    const variant = await this.mobileService.findVariantById(id);
-    return res.json({ status: 200, message: 'success', data: variant });
+  ): Promise<ResType<MobileDto>> {
+    const mobile = await this.mobileService.findMobileById(id);
+    return { message: 'success', data: mobile };
   }
 
-  /**
-   *
-   * This request updates mobile price as variations
-   *
-   */
-  @Put('/price/:id')
-  async updateMobilePrice(
-    @Res() res: Response,
-    @Param() { id }: { id: string },
-    @Body() variant: VariantDto[],
-  ) {
-    console.log('hello5');
-
-    const doc = await this.mobileService.updateValue(id, 'variant', variant);
-    return res.json({ status: 200, message: 'success', data: doc });
+  @Roles(Role.admin)
+  @Put('update-price')
+  async updateMobileVariantPrices(
+    @Req() req: Request,
+    @Body() body: VariantUpdateDto,
+  ): Promise<ResType<UpdateWriteOpResult>> {
+    const { id, variants } = body;
+    const updatedOptions =
+      await this.mobileService.updateMobileVariantPrices<UpdateWriteOpResult>(
+        id,
+        variants,
+      );
+    return { message: 'success', data: updatedOptions };
   }
 }

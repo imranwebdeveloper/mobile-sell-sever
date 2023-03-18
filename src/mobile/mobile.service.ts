@@ -1,5 +1,6 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import {
+  BadGatewayException,
   BadRequestException,
   HttpException,
   HttpStatus,
@@ -9,11 +10,14 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Mobile, MobileDocument } from '../schema/mobile';
 import { MobileDto } from './dto/mobile.dto';
+import { VariantDto } from './dto/variant.dto';
+import { UtilsService } from '../utils/utils.service';
 
 @Injectable()
 export class MobileService {
   constructor(
     @InjectModel(Mobile.name) private mobileModel: Model<MobileDocument>,
+    private utilsService: UtilsService,
   ) {}
 
   async getAllMobileList() {
@@ -36,23 +40,6 @@ export class MobileService {
       console.log(error.message);
     }
   }
-
-  /**
-   * This function give all mobile list items
-   *
-   * Example:
-   *
-   * Apple, Samsung,
-   *
-   */
-
-  /**
-   *
-   * This is function used to get all individual mobile model devices
-   *
-   * example :  Samsung all devices
-   */
-
   async getMobileByBrand(brand: string): Promise<any> {
     const brandName = brand.charAt(0).toUpperCase() + brand.slice(1);
 
@@ -64,32 +51,37 @@ export class MobileService {
     }
   }
 
-  /**
-   *
-   * this function only provide variants of the mobile document by id
-   * @param {string} _id
-   * @returns :  [{ram:12, rom:64, offical:25000, unofficial:22000}]
-   */
-
-  async findVariantById(_id: string) {
+  async findMobileById(_id: string): Promise<any> {
     try {
-      return await this.mobileModel.findById({ _id });
+      const id = this.utilsService.verifyId(_id);
+      const document = await this.mobileModel.findById({ _id: id });
+      if (!document) throw new NotFoundException('Mobile not found');
+      return document;
     } catch (error) {
-      throw new HttpException(
-        `Document with id ${_id} not found`,
-        HttpStatus.NOT_FOUND,
-      );
+      throw new NotFoundException(error.message);
     }
   }
 
-  async updateValue<T>(id: string, field: string, newValue: T): Promise<any> {
+  /**
+   * Updates the prices of the variants for a mobile device with the specified ID.
+   * @param id The ID of the mobile device to update.
+   * @param variantNewPrice The array of new prices for the mobile device variants.
+   * @returns A Promise that resolves to the result of the update operation.
+   * @throws BadRequestException if an error occurs during the update operation.
+   */
+
+  async updateMobileVariantPrices<T>(
+    id: string,
+    variantNewPrice: VariantDto[],
+  ): Promise<T> {
     try {
-      return this.mobileModel.updateOne(
+      const updatedOptions = await this.mobileModel.updateOne(
         { _id: id },
-        { $set: { [field]: newValue } },
+        { $set: { variant: variantNewPrice } },
       );
+      return updatedOptions as T;
     } catch (error) {
-      console.log(error.message);
+      throw new BadRequestException(error.message);
     }
   }
 }

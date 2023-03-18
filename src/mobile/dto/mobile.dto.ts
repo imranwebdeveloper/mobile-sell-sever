@@ -1,3 +1,5 @@
+import { VariantDto } from './variant.dto';
+
 export class MobileDto {
   brandName: string;
   model: string;
@@ -14,7 +16,7 @@ export class MobileDto {
   os: string;
   fingerprint: string;
   sdCard: string;
-  variant: [];
+  variant: VariantDto[];
   romOption: string;
   ramOption: string;
   processor: string;

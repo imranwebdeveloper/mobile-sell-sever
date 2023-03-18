@@ -14,6 +14,7 @@ import { CommentModule } from './comment/comment.module';
 import configuration from './store/config/configuration';
 import { RolesGuard } from './auth/guards/role.guard';
 import { JwtStrategy } from './auth/strategy/jwt.strategy';
+import { UtilsModule } from './utils/utils.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { JwtStrategy } from './auth/strategy/jwt.strategy';
     UsersModule,
     AuthModule,
     CommentModule,
+    UtilsModule,
   ],
   controllers: [AppController],
   providers: [

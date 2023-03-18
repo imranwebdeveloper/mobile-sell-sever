@@ -1,4 +1,4 @@
-import { IsString, IsNumber } from 'class-validator';
+import { IsString, IsNumber, IsArray } from 'class-validator';
 
 export class VariantDto {
   @IsString()
@@ -12,4 +12,11 @@ export class VariantDto {
 
   @IsNumber()
   unofficial: number;
+}
+
+export class VariantUpdateDto {
+  @IsArray()
+  variants: VariantDto[];
+  @IsString()
+  id: string;
 }
