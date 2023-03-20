@@ -1,4 +1,4 @@
 export interface ResType<T> {
-  message: string | 'success';
+  message: 'success';
   data: T;
 }

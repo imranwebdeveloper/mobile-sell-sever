@@ -1,9 +1,6 @@
 import { Model, Types } from 'mongoose';
 import {
-  BadGatewayException,
   BadRequestException,
-  HttpException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -40,9 +37,9 @@ export class MobileService {
       console.log(error.message);
     }
   }
+
   async getMobileByBrand(brand: string): Promise<any> {
     const brandName = brand.charAt(0).toUpperCase() + brand.slice(1);
-
     try {
       const doc = await this.mobileModel.find({ brandName });
       return doc;
@@ -62,23 +59,33 @@ export class MobileService {
     }
   }
 
-  /**
-   * Updates the prices of the variants for a mobile device with the specified ID.
-   * @param id The ID of the mobile device to update.
-   * @param variantNewPrice The array of new prices for the mobile device variants.
-   * @returns A Promise that resolves to the result of the update operation.
-   * @throws BadRequestException if an error occurs during the update operation.
-   */
-
   async updateMobileVariantPrices<T>(
-    id: string,
+    _id: string,
     variantNewPrice: VariantDto[],
   ): Promise<T> {
     try {
+      const id = this.utilsService.verifyId(_id);
       const updatedOptions = await this.mobileModel.updateOne(
         { _id: id },
         { $set: { variant: variantNewPrice } },
       );
+      if (!updatedOptions) throw new Error('Document not found');
+      return updatedOptions as T;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async updateMobileContent<T>(_id: string, content: any): Promise<T> {
+    try {
+      const id = this.utilsService.verifyId(_id);
+      const fieldName = Object.keys(content)[0];
+      const updatedOptions = await this.mobileModel.findOneAndUpdate(
+        { _id: id, [fieldName]: { $exists: true } },
+        { $set: content },
+        { new: true },
+      );
+      if (!updatedOptions) throw new Error('Document not found');
       return updatedOptions as T;
     } catch (error) {
       throw new BadRequestException(error.message);
