@@ -1,10 +1,8 @@
-import { Body, Controller, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { Request } from 'express';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { Role } from '../store/enum/user-role.enum';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import { CommentService } from './comment.service';
-import { CommentDto } from './dto/comment.dto';
+import { Body, Controller, Param, Post, Req } from '@nestjs/common';
+import { Role } from '../constants/user-role.enum';
+import { CommentService } from '../providers/comment.service';
+import { CommentDto } from '../dtos/create-comment.dto';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 @Controller('comment')
 export class CommentController {

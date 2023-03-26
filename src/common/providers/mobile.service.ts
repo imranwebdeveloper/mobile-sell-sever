@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Mobile, MobileDocument } from '../schema/mobile';
-import { MobileDto } from './dto/mobile.dto';
-import { VariantDto } from './dto/variant.dto';
-import { UtilsService } from '../utils/utils.service';
+import { MobileDto } from '../dtos/create-mobile.dto';
+import { VariantDto } from '../dtos/mobile-variant.dto';
+import { UtilsService } from './utils.service';
 
 @Injectable()
 export class MobileService {

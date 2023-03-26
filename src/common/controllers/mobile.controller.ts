@@ -8,14 +8,13 @@ import {
   Put,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { MobileDto } from './dto/mobile.dto';
-import { VariantUpdateDto } from './dto/variant.dto';
-import { MobileService } from './mobile.service';
-import { ResType } from '../store/type/response.type';
-import { UpdateWriteOpResult } from '../store/type/document-write-result.type';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { Role } from '../store/enum/user-role.enum';
-import { Console } from 'console';
+import { MobileDto } from '../dtos/create-mobile.dto';
+import { VariantUpdateDto } from '../dtos/mobile-variant.dto';
+import { MobileService } from '../providers/mobile.service';
+import { ResType } from '../interfaces/response-type';
+import { UpdateWriteOpResult } from '../interfaces/doc-write-result';
+import { Role } from '../constants/user-role.enum';
+import { Roles } from '../decorators/roles.decorator';
 
 @Controller('mobile')
 export class MobileController {

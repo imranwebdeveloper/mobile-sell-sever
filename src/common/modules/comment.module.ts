@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UsersModule } from '../users/users.module';
+import { UsersModule } from './users.module';
 import { Comment, CommentSchema } from '../schema/comment';
-import { CommentController } from './comment.controller';
-import { CommentService } from './comment.service';
+import { CommentController } from '../controllers/comment.controller';
+import { CommentService } from '../providers/comment.service';
 import { User, UserSchema } from '../schema/user';
 import { Mobile, MobileSchema } from '../schema/mobile';
 

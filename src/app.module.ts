@@ -4,17 +4,17 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { HttpExceptionFilter } from './filter/http-exception.filter';
-import { MobileModule } from './mobile/mobile.module';
-import { Mobile, MobileSchema } from './schema/mobile';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { HttpExceptionFilter } from './common/filter/http-exception.filter';
+import { MobileModule } from './common/modules/mobile.module';
+import { Mobile, MobileSchema } from './common/schema/mobile';
+import { UsersModule } from './common/modules/users.module';
+import { AuthModule } from './common/modules/auth.module';
 import { JwtModule } from '@nestjs/jwt';
-import { CommentModule } from './comment/comment.module';
-import configuration from './store/config/configuration';
-import { RolesGuard } from './auth/guards/role.guard';
-import { JwtStrategy } from './auth/strategy/jwt.strategy';
-import { UtilsModule } from './utils/utils.module';
+import { CommentModule } from './common/modules/comment.module';
+import configuration from './config/configuration';
+import { RolesGuard } from './common/guards/role.guard';
+import { JwtStrategy } from './common/strategy/jwt.strategy';
+import { UtilsModule } from './common/modules/utils.module';
 
 @Module({
   imports: [

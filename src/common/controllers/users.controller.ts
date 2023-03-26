@@ -11,12 +11,12 @@ import {
   Req,
   HttpStatus,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthService } from '../auth/auth.service';
-import { LocalAuthGuard } from '../auth/guards/auth.guard';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { UsersService } from '../providers/users.service';
+import { CreateUserDto } from '../dtos/create-user.dto';
+import { UpdateUserDto } from '../dtos/update-user.dto';
+import { AuthService } from '../providers/auth.service';
+import { LocalAuthGuard } from '../guards/auth.guard';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 
 @Controller('user')
 export class UsersController {

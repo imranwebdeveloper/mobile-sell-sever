@@ -5,7 +5,7 @@ import {
   MaxLength,
   IsEnum,
 } from 'class-validator';
-import { Role } from '../../store/enum/user-role.enum';
+import { Role } from '../constants/user-role.enum';
 export class CreateUserDto {
   @MinLength(4)
   @MaxLength(18)

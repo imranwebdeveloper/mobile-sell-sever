@@ -1,4 +1,4 @@
-import { VariantDto } from './variant.dto';
+import { VariantDto } from './mobile-variant.dto';
 
 export class MobileDto {
   category: string;

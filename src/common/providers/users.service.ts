@@ -7,11 +7,11 @@ import {
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from 'src/schema/user';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { User, UserDocument } from 'src/common/schema/user';
+import { CreateUserDto } from '../dtos/create-user.dto';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 // import { AuthService } from 'src/auth/auth.service';
-import { LoginUserDto } from './dto/login-user.dto';
+import { LoginUserDto } from '../dtos/login-user.dto';
 
 @Injectable()
 export class UsersService {
