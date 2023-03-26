@@ -22,10 +22,8 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     try {
       const user = new this.userModel(createUserDto);
-
       return await user.save();
     } catch (error) {
-      console.log(error.massage);
       throw new BadRequestException({ validatorError: error.message });
     }
   }

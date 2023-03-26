@@ -9,8 +9,8 @@ async function bootstrap() {
   app.enableCors();
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(process.env.PORT || 5000, () => {
-    console.log('listening on port' + ' ' + 5000);
+  await app.listen(process.env.PORT || 5000, async () => {
+    console.log('listening on port ' + (await app.getUrl()));
   });
 }
 bootstrap();

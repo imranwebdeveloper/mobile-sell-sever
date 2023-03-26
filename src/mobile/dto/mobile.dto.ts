@@ -1,6 +1,7 @@
 import { VariantDto } from './variant.dto';
 
 export class MobileDto {
+  category: string;
   brandName: string;
   model: string;
   releasedDate: string;

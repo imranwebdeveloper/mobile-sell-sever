@@ -29,12 +29,13 @@ export class MobileService {
     }
   }
 
-  async saveNewMobile(mobile: MobileDto): Promise<Mobile> {
+  async saveNewMobile(mobile: MobileDto): Promise<{ id: string }> {
     try {
-      const res = new this.mobileModel(mobile);
-      return await res.save();
+      const doc = new this.mobileModel(mobile);
+      const writeOption = await doc.save();
+      return { id: doc.id };
     } catch (error) {
-      console.log(error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -42,9 +43,10 @@ export class MobileService {
     const brandName = brand.charAt(0).toUpperCase() + brand.slice(1);
     try {
       const doc = await this.mobileModel.find({ brandName });
+      if (!doc) throw new NotFoundException('No Mobile List found');
       return doc;
     } catch (error) {
-      console.log(error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -55,7 +57,7 @@ export class MobileService {
       if (!document) throw new NotFoundException('Mobile not found');
       return document;
     } catch (error) {
-      throw new NotFoundException(error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -69,7 +71,7 @@ export class MobileService {
         { _id: id },
         { $set: { variant: variantNewPrice } },
       );
-      if (!updatedOptions) throw new Error('Document not found');
+      if (!updatedOptions) throw new NotFoundException('Document not found');
       return updatedOptions as T;
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -85,8 +87,20 @@ export class MobileService {
         { $set: content },
         { new: true },
       );
-      if (!updatedOptions) throw new Error('Document not found');
+      if (!updatedOptions) throw new NotFoundException('Document not found');
       return updatedOptions as T;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+  async deleteMobileById(_id: string): Promise<{ id: string }> {
+    try {
+      const id = this.utilsService.verifyId(_id);
+      const deleteOptions = await this.mobileModel.findOneAndDelete({
+        _id: id,
+      });
+      if (!deleteOptions) throw new NotFoundException('Document not found');
+      return { id: deleteOptions.id };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
