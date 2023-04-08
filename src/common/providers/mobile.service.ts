@@ -28,6 +28,16 @@ export class MobileService {
       throw new BadRequestException();
     }
   }
+  async getDocumentsByQuery(query: any) {
+    try {
+      const doc = await this.mobileModel
+        .find(query)
+        .select(['brandName', 'model', 'imgUrl', 'variant', 'updatedAt']);
+      return doc;
+    } catch (error) {
+      throw new BadRequestException();
+    }
+  }
 
   async saveNewMobile(mobile: MobileDto): Promise<{ id: string }> {
     try {

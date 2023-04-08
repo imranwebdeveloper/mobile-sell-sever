@@ -6,8 +6,8 @@ import {
   Param,
   Delete,
   Put,
+  Query,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
 import { MobileDto } from '../dtos/create-mobile.dto';
 import { VariantUpdateDto } from '../dtos/mobile-variant.dto';
 import { MobileService } from '../providers/mobile.service';
@@ -16,13 +16,36 @@ import { UpdateWriteOpResult } from '../interfaces/doc-write-result';
 import { Role } from '../constants/user-role.enum';
 import { Roles } from '../decorators/roles.decorator';
 
-@Controller('mobile')
+@Controller('mobiles')
 export class MobileController {
   constructor(private readonly mobileService: MobileService) {}
 
+  @Get()
+  async getMobile(@Query('brand') brand: string) {
+    const query = {};
+    if (brand) {
+      query['brandName'] = {
+        $regex: new RegExp('\\b' + brand + '\\b', 'i'),
+      };
+    }
+
+    const data = await this.mobileService.getDocumentsByQuery(query);
+    return { massage: 'success', data };
+  }
+
   @Get('list')
-  async getAllMobileList() {
-    const data = await this.mobileService.getAllMobileList();
+  async getAllMobileList(@Query('brand') brand: string) {
+    let data: any;
+    const query = {};
+    if (brand) {
+      query['brandName'] = {
+        $regex: new RegExp('\\b' + brand + '\\b', 'i'),
+      };
+      data = await this.mobileService.getDocumentsByQuery(query);
+    } else {
+      data = await this.mobileService.getAllMobileList();
+    }
+
     return { status: 'success', data };
   }
   @Get('/:id')
@@ -30,6 +53,7 @@ export class MobileController {
     const mobile = await this.mobileService.findMobileById(id);
     return { message: 'success', data: mobile };
   }
+
   @Roles(Role.admin)
   @Post('new-mobile')
   async addNewMobile(@Body() mobileDto: MobileDto): Promise<ResType<any>> {
