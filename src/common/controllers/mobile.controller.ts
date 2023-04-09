@@ -34,9 +34,13 @@ export class MobileController {
   }
 
   @Get('list')
-  async getAllMobileList(@Query('brand') brand: string) {
+  async getAllMobileList(
+    @Query('brand') brand: string,
+    @Query('id') id: string,
+  ) {
     let data: any;
     const query = {};
+
     if (brand) {
       query['brandName'] = {
         $regex: new RegExp('\\b' + brand + '\\b', 'i'),
@@ -48,9 +52,9 @@ export class MobileController {
 
     return { status: 'success', data };
   }
-  @Get('/:id')
+  @Get('brand/:id')
   async getMobileById(@Param('id') id: string): Promise<ResType<MobileDto>> {
-    const mobile = await this.mobileService.findMobileById(id);
+    const mobile = await this.mobileService.findMobileByModeLId(id);
     return { message: 'success', data: mobile };
   }
 

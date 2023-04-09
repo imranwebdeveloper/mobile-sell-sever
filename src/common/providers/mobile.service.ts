@@ -21,7 +21,14 @@ export class MobileService {
     try {
       const doc = await this.mobileModel
         .find()
-        .select(['brandName', 'model', 'imgUrl', 'variant', 'updatedAt']);
+        .select([
+          'brandName',
+          'model',
+          'imgUrl',
+          'variant',
+          'updatedAt',
+          'model_id',
+        ]);
       if (!doc) throw new NotFoundException('No Mobile List found');
       return doc;
     } catch (error) {
@@ -32,7 +39,14 @@ export class MobileService {
     try {
       const doc = await this.mobileModel
         .find(query)
-        .select(['brandName', 'model', 'imgUrl', 'variant', 'updatedAt']);
+        .select([
+          'brandName',
+          'model',
+          'imgUrl',
+          'variant',
+          'updatedAt',
+          'model_id',
+        ]);
       return doc;
     } catch (error) {
       throw new BadRequestException();
@@ -60,10 +74,10 @@ export class MobileService {
     }
   }
 
-  async findMobileById(_id: string): Promise<any> {
+  async findMobileByModeLId(id: string): Promise<any> {
     try {
-      const id = this.utilsService.verifyId(_id);
-      const document = await this.mobileModel.findById({ _id: id });
+      // const id = this.utilsService.verifyId(_id);
+      const document = await this.mobileModel.findOne({ model_id: id });
       if (!document) throw new NotFoundException('Mobile not found');
       return document;
     } catch (error) {

@@ -89,6 +89,8 @@ export class Mobile {
   inTheBox: [];
   @Prop()
   imgUrl: String;
+  @Prop({ unique: true })
+  model_id: String;
 }
 
 export const MobileSchema = SchemaFactory.createForClass(Mobile);
