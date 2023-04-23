@@ -74,10 +74,10 @@ export class MobileService {
     }
   }
 
-  async findMobileByModeLId(id: string): Promise<any> {
+  async findMobileByModelId(id: string): Promise<any> {
     try {
       // const id = this.utilsService.verifyId(_id);
-      const document = await this.mobileModel.findOne({ model_id: id });
+      const document = await this.mobileModel.findById(id);
       if (!document) throw new NotFoundException('Mobile not found');
       return document;
     } catch (error) {

@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
   Query,
+  Req,
 } from '@nestjs/common';
 import { MobileDto } from '../dtos/create-mobile.dto';
 import { VariantUpdateDto } from '../dtos/mobile-variant.dto';
@@ -21,16 +22,15 @@ export class MobileController {
   constructor(private readonly mobileService: MobileService) {}
 
   @Get()
-  async getMobile(@Query('brand') brand: string) {
-    const query = {};
-    if (brand) {
-      query['brandName'] = {
-        $regex: new RegExp('\\b' + brand + '\\b', 'i'),
-      };
-    }
+  async getMobiles(): Promise<ResType<any>> {
+    const data = await this.mobileService.getAllMobileList();
+    return { message: 'success', data };
+  }
 
-    const data = await this.mobileService.getDocumentsByQuery(query);
-    return { massage: 'success', data };
+  @Get(':id')
+  async getMobileById(@Param('id') id: string): Promise<ResType<MobileDto>> {
+    const mobile = await this.mobileService.findMobileByModelId(id);
+    return { message: 'success', data: mobile };
   }
 
   @Get('list')
@@ -51,11 +51,6 @@ export class MobileController {
     }
 
     return { status: 'success', data };
-  }
-  @Get('brand/:id')
-  async getMobileById(@Param('id') id: string): Promise<ResType<MobileDto>> {
-    const mobile = await this.mobileService.findMobileByModeLId(id);
-    return { message: 'success', data: mobile };
   }
 
   @Roles(Role.admin)

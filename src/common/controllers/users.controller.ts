@@ -18,7 +18,7 @@ import { AuthService } from '../providers/auth.service';
 import { LocalAuthGuard } from '../guards/auth.guard';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 
-@Controller('user')
+@Controller('users')
 export class UsersController {
   constructor(
     private readonly authService: AuthService,
@@ -36,6 +36,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   async login(@Req() req: any): Promise<any> {
     const data = await this.authService.login(req.user);
+    console.log(data);
     return { status: 'success', data };
   }
 
