@@ -23,40 +23,42 @@ export class MobileController {
 
   @Get()
   async getMobiles(): Promise<ResType<any>> {
-    const data = await this.mobileService.getAllMobileList();
+    const data = await this.mobileService.getMobiles();
     return { message: 'success', data };
   }
 
   @Get(':id')
   async getMobileById(@Param('id') id: string): Promise<ResType<MobileDto>> {
-    const mobile = await this.mobileService.findMobileByModelId(id);
+    const mobile = await this.mobileService.getMobileById(id);
     return { message: 'success', data: mobile };
   }
 
-  @Get('list')
-  async getAllMobileList(
-    @Query('brand') brand: string,
-    @Query('id') id: string,
-  ) {
-    let data: any;
-    const query = {};
+  @Get('model/:name')
+  async getMobileByModelId(
+    @Param('name') name: string,
+  ): Promise<ResType<MobileDto>> {
+    const data = await this.mobileService.getMobileByModelId(name);
+    return { message: 'success', data };
+  }
 
-    if (brand) {
-      query['brandName'] = {
-        $regex: new RegExp('\\b' + brand + '\\b', 'i'),
-      };
-      data = await this.mobileService.getDocumentsByQuery(query);
-    } else {
-      data = await this.mobileService.getAllMobileList();
-    }
-
-    return { status: 'success', data };
+  @Get('brand/:name')
+  async getMobilesByBrandsName(
+    @Param('name') name: string,
+  ): Promise<ResType<any>> {
+    const data = await this.mobileService.getMobilesByBrandName(name);
+    return { message: 'success', data };
   }
 
   @Roles(Role.admin)
   @Post('new-mobile')
   async addNewMobile(@Body() mobileDto: MobileDto): Promise<ResType<any>> {
-    const data = await this.mobileService.saveNewMobile(mobileDto);
+    const model_id = `${mobileDto.brandName}-${mobileDto.model
+      .split(' ')
+      .join('-')}`;
+    const data = await this.mobileService.saveNewMobile({
+      model_id,
+      ...mobileDto,
+    });
     return { message: 'success', data };
   }
 

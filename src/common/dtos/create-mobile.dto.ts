@@ -43,4 +43,5 @@ export class MobileDto {
   others: [];
   inTheBox: [];
   imgUrl: string;
+  model_id: string;
 }

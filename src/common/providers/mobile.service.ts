@@ -17,7 +17,7 @@ export class MobileService {
     private utilsService: UtilsService,
   ) {}
 
-  async getAllMobileList() {
+  async getMobiles() {
     try {
       const doc = await this.mobileModel
         .find()
@@ -35,10 +35,42 @@ export class MobileService {
       throw new BadRequestException();
     }
   }
-  async getDocumentsByQuery(query: any) {
+
+  async getMobileById(id: string): Promise<any> {
+    try {
+      const document = await this.mobileModel.findById(id);
+      if (!document) throw new NotFoundException('Mobile not found');
+      return document;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+  async getMobileByModelId(model: string): Promise<any> {
+    try {
+      const document = await this.mobileModel.findOne({ model_id: model });
+      if (!document) throw new NotFoundException('Mobile not found');
+      return document;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+  async saveNewMobile(mobile: MobileDto): Promise<{ id: string }> {
+    try {
+      const doc = new this.mobileModel(mobile);
+      const writeOption = await doc.save();
+      return { id: doc.id };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async getMobilesByBrandName(name: string) {
+    const curser = {
+      brandName: { $regex: new RegExp('\\b' + name + '\\b', 'i') },
+    };
     try {
       const doc = await this.mobileModel
-        .find(query)
+        .find(curser)
         .select([
           'brandName',
           'model',
@@ -53,33 +85,12 @@ export class MobileService {
     }
   }
 
-  async saveNewMobile(mobile: MobileDto): Promise<{ id: string }> {
-    try {
-      const doc = new this.mobileModel(mobile);
-      const writeOption = await doc.save();
-      return { id: doc.id };
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
-
   async getMobileByBrand(brand: string): Promise<any> {
     const brandName = brand.charAt(0).toUpperCase() + brand.slice(1);
     try {
       const doc = await this.mobileModel.find({ brandName });
       if (!doc) throw new NotFoundException('No Mobile List found');
       return doc;
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
-
-  async findMobileByModelId(id: string): Promise<any> {
-    try {
-      // const id = this.utilsService.verifyId(_id);
-      const document = await this.mobileModel.findById(id);
-      if (!document) throw new NotFoundException('Mobile not found');
-      return document;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
