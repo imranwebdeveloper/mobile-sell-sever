@@ -8,6 +8,7 @@ import {
   Put,
   Query,
   Req,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { MobileDto } from '../dtos/create-mobile.dto';
 import { VariantUpdateDto } from '../dtos/mobile-variant.dto';
@@ -25,6 +26,18 @@ export class MobileController {
   async getMobiles(): Promise<ResType<any>> {
     const data = await this.mobileService.getMobiles();
     return { message: 'success', data };
+  }
+
+  @Get('latest')
+  async getLatestMobiles(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ): Promise<ResType<any>> {
+    const { count, latestMobiles } = await this.mobileService.getLatestMobiles(
+      page,
+      limit,
+    );
+    return { message: 'success', data: { count, mobiles: latestMobiles } };
   }
 
   @Get(':id')

@@ -36,6 +36,27 @@ export class MobileService {
     }
   }
 
+  async getLatestMobiles(pageNumber?: number, perPage?: number) {
+    const currentPage = Number(pageNumber) || 1;
+    const limit = Number(perPage) || 12;
+    const skip = limit * (currentPage - 1);
+    const count = await this.mobileModel.count();
+    const latestMobiles = await this.mobileModel
+      .find({})
+      .limit(limit)
+      .skip(skip)
+      .sort({ createdAt: 'desc' })
+      .select([
+        'brandName',
+        'model',
+        'imgUrl',
+        'variant',
+        'updatedAt',
+        'model_id',
+      ]);
+    return { count, latestMobiles };
+  }
+
   async getMobileById(id: string): Promise<any> {
     try {
       const document = await this.mobileModel.findById(id);
