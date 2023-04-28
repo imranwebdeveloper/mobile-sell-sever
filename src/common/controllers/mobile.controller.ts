@@ -33,11 +33,12 @@ export class MobileController {
     @Query('page') page: number,
     @Query('limit') limit: number,
   ): Promise<ResType<any>> {
-    const { count, latestMobiles } = await this.mobileService.getLatestMobiles(
-      page,
-      limit,
-    );
-    return { message: 'success', data: { count, mobiles: latestMobiles } };
+    const { count, latestMobiles, parPage } =
+      await this.mobileService.getLatestMobiles(page, limit);
+    return {
+      message: 'success',
+      data: { count, mobiles: latestMobiles, parPage },
+    };
   }
 
   @Get(':id')

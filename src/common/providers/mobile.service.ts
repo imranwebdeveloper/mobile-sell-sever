@@ -54,7 +54,7 @@ export class MobileService {
         'updatedAt',
         'model_id',
       ]);
-    return { count, latestMobiles };
+    return { parPage: limit, count, latestMobiles };
   }
 
   async getMobileById(id: string): Promise<any> {
