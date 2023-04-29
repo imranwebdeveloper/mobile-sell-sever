@@ -45,7 +45,7 @@ export class MobileService {
       .find({})
       .limit(limit)
       .skip(skip)
-      .sort({ createdAt: 'desc' })
+      .sort({ releasedDate: 'desc' })
       .select([
         'brandName',
         'model',
@@ -85,13 +85,25 @@ export class MobileService {
     }
   }
 
-  async getMobilesByBrandName(name: string) {
-    const curser = {
-      brandName: { $regex: new RegExp('\\b' + name + '\\b', 'i') },
-    };
+  async getMobilesByBrandName(
+    name: string,
+    pageNumber: string,
+    perPage: string,
+  ) {
     try {
-      const doc = await this.mobileModel
+      const curser = {
+        brandName: { $regex: new RegExp('\\b' + name + '\\b', 'i') },
+      };
+
+      const currentPage = Number(pageNumber) || 1;
+      const limit = Number(perPage) || 12;
+      const skip = limit * (currentPage - 1);
+      const count = await this.mobileModel.countDocuments(curser);
+      const brands = await this.mobileModel
         .find(curser)
+        .limit(limit)
+        .skip(skip)
+        .sort({ releasedDate: 'desc' })
         .select([
           'brandName',
           'model',
@@ -100,9 +112,9 @@ export class MobileService {
           'updatedAt',
           'model_id',
         ]);
-      return doc;
+      return { parPage: limit, count, mobiles: brands };
     } catch (error) {
-      throw new BadRequestException();
+      throw new BadRequestException(error);
     }
   }
 

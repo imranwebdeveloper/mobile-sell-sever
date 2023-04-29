@@ -7,6 +7,8 @@ export type MobileDocument = HydratedDocument<Mobile>;
 export class Mobile {
   //   @Prop()
   //   name: string;
+  @Prop({ required: true })
+  category: String;
   @Prop()
   brandName: String;
   @Prop()

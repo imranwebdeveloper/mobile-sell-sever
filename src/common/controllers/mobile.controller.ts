@@ -8,7 +8,6 @@ import {
   Put,
   Query,
   Req,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { MobileDto } from '../dtos/create-mobile.dto';
 import { VariantUpdateDto } from '../dtos/mobile-variant.dto';
@@ -40,6 +39,18 @@ export class MobileController {
       data: { count, mobiles: latestMobiles, parPage },
     };
   }
+  @Get('category')
+  async getMobilesByCategory(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ): Promise<ResType<any>> {
+    const { count, latestMobiles, parPage } =
+      await this.mobileService.getLatestMobiles(page, limit);
+    return {
+      message: 'success',
+      data: { count, mobiles: latestMobiles, parPage },
+    };
+  }
 
   @Get(':id')
   async getMobileById(@Param('id') id: string): Promise<ResType<MobileDto>> {
@@ -58,8 +69,14 @@ export class MobileController {
   @Get('brand/:name')
   async getMobilesByBrandsName(
     @Param('name') name: string,
+    @Query('page') page: string,
+    @Query('limit') limit: string,
   ): Promise<ResType<any>> {
-    const data = await this.mobileService.getMobilesByBrandName(name);
+    const data = await this.mobileService.getMobilesByBrandName(
+      name,
+      page,
+      limit,
+    );
     return { message: 'success', data };
   }
 
@@ -68,10 +85,12 @@ export class MobileController {
   async addNewMobile(@Body() mobileDto: MobileDto): Promise<ResType<any>> {
     const model_id = `${mobileDto.brandName}-${mobileDto.model
       .split(' ')
-      .join('-')}`;
+      .join('-')}`.toLowerCase();
+    const category = mobileDto.category.split(' ').join('-').toLowerCase();
     const data = await this.mobileService.saveNewMobile({
-      model_id,
       ...mobileDto,
+      model_id,
+      category,
     });
     return { message: 'success', data };
   }
