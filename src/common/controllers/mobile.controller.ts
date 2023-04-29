@@ -39,16 +39,17 @@ export class MobileController {
       data: { count, mobiles: latestMobiles, parPage },
     };
   }
-  @Get('category')
+  @Get('category/:slug')
   async getMobilesByCategory(
-    @Query('page') page: number,
-    @Query('limit') limit: number,
+    @Param('slug') slug: string,
+    @Query('page') page: string,
+    @Query('limit') limit: string,
   ): Promise<ResType<any>> {
-    const { count, latestMobiles, parPage } =
-      await this.mobileService.getLatestMobiles(page, limit);
+    const { count, mobiles, parPage } =
+      await this.mobileService.getMobilesByCategory(slug, page, limit);
     return {
       message: 'success',
-      data: { count, mobiles: latestMobiles, parPage },
+      data: { count, mobiles: mobiles, parPage },
     };
   }
 

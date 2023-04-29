@@ -57,6 +57,39 @@ export class MobileService {
     return { parPage: limit, count, latestMobiles };
   }
 
+  async getMobilesByCategory(
+    category: string,
+    pageNumber: string,
+    perPage: string,
+  ) {
+    try {
+      const curser = {
+        category: { $regex: new RegExp('\\b' + category + '\\b', 'i') },
+      };
+
+      const currentPage = Number(pageNumber) || 1;
+      const limit = Number(perPage) || 12;
+      const skip = limit * (currentPage - 1);
+      const count = await this.mobileModel.countDocuments(curser);
+      const brands = await this.mobileModel
+        .find(curser)
+        .limit(limit)
+        .skip(skip)
+        .sort({ releasedDate: 'desc' })
+        .select([
+          'brandName',
+          'model',
+          'imgUrl',
+          'variant',
+          'updatedAt',
+          'model_id',
+        ]);
+      return { parPage: limit, count, mobiles: brands };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
   async getMobileById(id: string): Promise<any> {
     try {
       const document = await this.mobileModel.findById(id);
