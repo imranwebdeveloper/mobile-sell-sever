@@ -39,6 +39,19 @@ export class MobileController {
       data: { count, mobiles: latestMobiles, parPage },
     };
   }
+  @Get('brand/:name')
+  async getMobilesByBrandsName(
+    @Param('name') name: string,
+    @Query('page') page: string,
+    @Query('limit') limit: string,
+  ): Promise<ResType<any>> {
+    const data = await this.mobileService.getMobilesByBrandName(
+      name,
+      page,
+      limit,
+    );
+    return { message: 'success', data };
+  }
   @Get('category/:slug')
   async getMobilesByCategory(
     @Param('slug') slug: string,
@@ -47,6 +60,20 @@ export class MobileController {
   ): Promise<ResType<any>> {
     const { count, mobiles, parPage } =
       await this.mobileService.getMobilesByCategory(slug, page, limit);
+    return {
+      message: 'success',
+      data: { count, mobiles: mobiles, parPage },
+    };
+  }
+  @Get('price/:range')
+  async getMobilesByPriceRange(
+    @Param('range') range: string,
+    @Query('page') page: string,
+    @Query('limit') limit: string,
+  ): Promise<ResType<any>> {
+    const rangeArray = range.split('-').map((item) => Number(item));
+    const { count, mobiles, parPage } =
+      await this.mobileService.getMobilesByPriceRange(page, limit, rangeArray);
     return {
       message: 'success',
       data: { count, mobiles: mobiles, parPage },
@@ -64,20 +91,6 @@ export class MobileController {
     @Param('name') name: string,
   ): Promise<ResType<MobileDto>> {
     const data = await this.mobileService.getMobileByModelId(name);
-    return { message: 'success', data };
-  }
-
-  @Get('brand/:name')
-  async getMobilesByBrandsName(
-    @Param('name') name: string,
-    @Query('page') page: string,
-    @Query('limit') limit: string,
-  ): Promise<ResType<any>> {
-    const data = await this.mobileService.getMobilesByBrandName(
-      name,
-      page,
-      limit,
-    );
     return { message: 'success', data };
   }
 

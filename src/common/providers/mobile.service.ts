@@ -89,6 +89,58 @@ export class MobileService {
       throw new BadRequestException(error);
     }
   }
+  async getMobilesByPriceRange(
+    pageNumber: string,
+    perPage: string,
+    range: number[],
+  ) {
+    const gte = range[0];
+    const lte = range[1];
+
+    try {
+      let cursor: any = {
+        variant: {
+          $elemMatch: {
+            $or: [
+              { official: { $gte: gte, $lte: lte } },
+              { unofficial: { $gte: gte, $lte: lte } },
+            ],
+          },
+        },
+      };
+
+      if (range.length === 1) {
+        cursor = {
+          variant: {
+            $elemMatch: {
+              $or: [{ official: { $gte: gte } }, { unofficial: { $gte: gte } }],
+            },
+          },
+        };
+      }
+
+      const currentPage = Number(pageNumber) || 1;
+      const limit = Number(perPage) || 12;
+      const skip = limit * (currentPage - 1);
+      const count = await this.mobileModel.countDocuments(cursor);
+      const brands = await this.mobileModel
+        .find(cursor)
+        .limit(limit)
+        .skip(skip)
+        .sort({ updatedAt: 'desc' })
+        .select([
+          'brandName',
+          'model',
+          'imgUrl',
+          'variant',
+          'updatedAt',
+          'model_id',
+        ]);
+      return { parPage: limit, count, mobiles: brands };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
 
   async getMobileById(id: string): Promise<any> {
     try {

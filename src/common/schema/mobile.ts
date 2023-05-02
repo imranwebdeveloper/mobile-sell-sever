@@ -5,8 +5,6 @@ export type MobileDocument = HydratedDocument<Mobile>;
 
 @Schema({ timestamps: true })
 export class Mobile {
-  //   @Prop()
-  //   name: string;
   @Prop({ required: true })
   category: String;
   @Prop()
@@ -40,7 +38,14 @@ export class Mobile {
   @Prop()
   sdCard: String;
   @Prop()
-  variant: [];
+  variant: [
+    {
+      rom: String;
+      ram: String;
+      official: Number;
+      unofficial: Number;
+    },
+  ];
   @Prop()
   romOption: String;
   @Prop()
