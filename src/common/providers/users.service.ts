@@ -4,14 +4,11 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from 'src/common/schema/user';
+import { User, UserDocument } from '../schema/user';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
-// import { AuthService } from 'src/auth/auth.service';
-import { LoginUserDto } from '../dtos/login-user.dto';
 
 @Injectable()
 export class UsersService {

@@ -2,7 +2,7 @@ import { Body, Controller, Param, Post, Req } from '@nestjs/common';
 import { Role } from '../constants/user-role.enum';
 import { CommentService } from '../providers/comment.service';
 import { CommentDto } from '../dtos/create-comment.dto';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { Roles } from '../decorators/roles.decorator';
 
 @Controller('comment')
 export class CommentController {
