@@ -163,9 +163,10 @@ export class MobileService {
   async saveNewMobile(mobile: MobileDto): Promise<{ id: string }> {
     try {
       const doc = new this.mobileModel(mobile);
-      const writeOption = await doc.save();
+      await doc.save();
       return { id: doc.id };
     } catch (error) {
+      console.log(error);
       throw new BadRequestException(error.message);
     }
   }

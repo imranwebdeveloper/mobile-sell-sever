@@ -1,9 +1,18 @@
 import { VariantDto } from './mobile-variant.dto';
+import { IsString, MinLength } from 'class-validator';
 
 export class MobileDto {
+  @IsString({ message: 'Category must be required' })
+  @MinLength(2)
   category: string;
+  @MinLength(2)
+  @IsString({ message: 'Brand Name must be required' })
   brandName: string;
+  @IsString({ message: 'Model Name must be required' })
+  @MinLength(2)
   model: string;
+  @MinLength(2)
+  @IsString({ message: 'Release date Name must be required' })
   releasedDate: string;
   networkBrands: string;
   simType: string;

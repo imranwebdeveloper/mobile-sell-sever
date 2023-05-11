@@ -5,13 +5,13 @@ export type MobileDocument = HydratedDocument<Mobile>;
 
 @Schema({ timestamps: true })
 export class Mobile {
-  @Prop({ required: true })
+  @Prop({ required: true, min: 2 })
   category: String;
-  @Prop()
+  @Prop({ required: true, min: 2 })
   brandName: String;
-  @Prop()
+  @Prop({ required: true, min: 2 })
   model: String;
-  @Prop()
+  @Prop({ required: true, min: 2 })
   releasedDate: String;
   @Prop()
   networkBrands: String;
@@ -37,7 +37,7 @@ export class Mobile {
   fingerprint: String;
   @Prop()
   sdCard: String;
-  @Prop()
+  @Prop({ required: true })
   variant: [
     {
       rom: String;

@@ -11,6 +11,7 @@ import { AuthModule } from './common/modules/auth.module';
 import { CommentModule } from './common/modules/comment.module';
 import { RolesGuard } from './common/guards/role.guard';
 import { UtilsModule } from './common/modules/utils.module';
+import { UploadModule } from './common/modules/upload.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UtilsModule } from './common/modules/utils.module';
     AuthModule,
     CommentModule,
     UtilsModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [

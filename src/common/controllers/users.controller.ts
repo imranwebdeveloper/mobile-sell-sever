@@ -36,7 +36,6 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   async login(@Req() req: any): Promise<any> {
     const data = await this.authService.login(req.user);
-    console.log(data);
     return { status: 'success', data };
   }
 

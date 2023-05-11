@@ -1,11 +1,11 @@
 import { IsString, IsNumber, IsArray } from 'class-validator';
 
 export class VariantDto {
-  @IsString()
-  rom: string;
+  @IsNumber()
+  rom: number;
 
-  @IsString()
-  ram: string;
+  @IsNumber()
+  ram: number;
 
   @IsNumber()
   official: number;
