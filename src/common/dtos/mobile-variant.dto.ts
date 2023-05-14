@@ -16,7 +16,7 @@ export class VariantDto {
 
 export class VariantUpdateDto {
   @IsArray()
-  variants: VariantDto[];
+  variant: VariantDto[];
   @IsString()
   id: string;
 }

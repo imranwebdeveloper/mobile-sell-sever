@@ -114,13 +114,13 @@ export class MobileController {
   async updateMobileVariantPrices(
     @Body() body: VariantUpdateDto,
   ): Promise<ResType<UpdateWriteOpResult>> {
-    const { id, variants } = body;
+    const { id, variant } = body;
     const data =
       await this.mobileService.updateMobileVariantPrices<UpdateWriteOpResult>(
         id,
-        variants,
+        variant,
       );
-    return { message: 'success', data };
+    return { message: 'success', data: data };
   }
 
   @Roles(Role.admin)
