@@ -9,7 +9,6 @@ import { MobileModule } from './common/modules/mobile.module';
 import { UsersModule } from './common/modules/users.module';
 import { AuthModule } from './common/modules/auth.module';
 import { CommentModule } from './common/modules/comment.module';
-import { RolesGuard } from './common/guards/role.guard';
 import { UtilsModule } from './common/modules/utils.module';
 import { UploadModule } from './common/modules/upload.module';
 import { ApiKeyAuthGuard } from './common/guards/ApiKeyAuth.guard';
@@ -17,10 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      // load: [configuration],
-      // isGlobal: true,
-    }),
+    ConfigModule.forRoot(),
     JwtModule.registerAsync({
       useFactory: () => ({
         secret: process.env.CLIENT_SECRETE,
