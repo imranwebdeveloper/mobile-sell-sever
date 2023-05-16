@@ -12,6 +12,8 @@ import { CommentModule } from './common/modules/comment.module';
 import { RolesGuard } from './common/guards/role.guard';
 import { UtilsModule } from './common/modules/utils.module';
 import { UploadModule } from './common/modules/upload.module';
+import { ApiKeyAuthGuard } from './common/guards/ApiKeyAuth.guard';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -19,7 +21,11 @@ import { UploadModule } from './common/modules/upload.module';
       // load: [configuration],
       // isGlobal: true,
     }),
-
+    JwtModule.registerAsync({
+      useFactory: () => ({
+        secret: process.env.CLIENT_SECRETE,
+      }),
+    }),
     MongooseModule.forRoot(process.env.DB),
     MobileModule,
     UsersModule,
@@ -37,7 +43,7 @@ import { UploadModule } from './common/modules/upload.module';
     },
     {
       provide: APP_GUARD,
-      useClass: RolesGuard,
+      useClass: ApiKeyAuthGuard,
     },
   ],
 })
