@@ -8,12 +8,16 @@ import { config } from './config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: true,
+    bodyParser: true,
+    cors: {
+      origin: 'https://mobile-seller.vercel.app',
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    },
   });
-  app.enableCors({
-    origin: 'https://mobile-seller.vercel.app',
-    preflightContinue: true,
-  });
+  // app.enableCors({
+  //   origin: 'https://mobile-seller.vercel.app',
+  //   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  // });
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
   const { firebase, storageBucket } = config();
