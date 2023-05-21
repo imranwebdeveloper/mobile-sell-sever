@@ -7,17 +7,11 @@ import * as admin from 'firebase-admin';
 import { config } from './config/configuration';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    bodyParser: true,
-    cors: {
-      origin: 'https://mobile-seller.vercel.app',
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    },
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.enableCors({
+    origin: 'https://mobile-seller.vercel.app',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   });
-  // app.enableCors({
-  //   origin: 'https://mobile-seller.vercel.app',
-  //   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  // });
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
   const { firebase, storageBucket } = config();
