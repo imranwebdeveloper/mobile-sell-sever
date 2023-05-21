@@ -166,7 +166,6 @@ export class MobileService {
       await doc.save();
       return { id: doc.id };
     } catch (error) {
-      console.log(error);
       throw new BadRequestException(error.message);
     }
   }
