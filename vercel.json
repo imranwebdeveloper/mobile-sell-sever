@@ -9,7 +9,7 @@
 
   "headers": [
     {
-      "methods": ["GET", "POST", "PUT", "PATCH", "OPTIONS", "DELETE"],
+      "source": "/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         { "key": "Access-Control-Allow-Origin", "value": "*" },
