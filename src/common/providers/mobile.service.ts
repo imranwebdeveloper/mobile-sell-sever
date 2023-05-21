@@ -20,7 +20,7 @@ export class MobileService {
   async getMobiles() {
     try {
       const doc = await this.mobileModel
-        .find()
+        .find({})
         .select([
           'brandName',
           'model',

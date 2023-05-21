@@ -29,12 +29,11 @@ export class ApiKeyAuthGuard implements CanActivate {
 
       if (!requiredRoles) return true;
 
-      const req = context.switchToHttp().getRequest();
-      const authHeader = req.headers.authorization;
+      const authHeader = request.headers.authorization;
       if (authHeader && authHeader.startsWith('Bearer ')) {
         const token = authHeader.split(' ')[1];
         const user = await this.authService.validateToken(token);
-        req.user = user;
+        request.user = user;
         return requiredRoles.some((role) => user.roles?.includes(role));
       }
       return false;

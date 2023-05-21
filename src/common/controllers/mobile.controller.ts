@@ -127,6 +127,7 @@ export class MobileController {
   @Put('update-content')
   async updateMobileContent(@Body() body: any): Promise<ResType<MobileDto>> {
     const { id, content } = body;
+
     const data = await this.mobileService.updateMobileContent<MobileDto>(
       id,
       content,

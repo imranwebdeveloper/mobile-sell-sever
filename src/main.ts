@@ -8,7 +8,7 @@ import { config } from './config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.enableCors();
+  app.enableCors({ origin: 'https://mobile-seller.vercel.app' });
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
   const { firebase, storageBucket } = config();
