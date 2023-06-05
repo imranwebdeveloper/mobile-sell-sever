@@ -98,6 +98,13 @@ export class Mobile {
   imgUrl: String;
   @Prop({ unique: true })
   model_id: String;
+  @Prop()
+  identifier: String;
+  positioning: String;
+  @Prop()
+  frontVideo: String;
+  @Prop()
+  mainVideo: String;
 }
 
 export const MobileSchema = SchemaFactory.createForClass(Mobile);

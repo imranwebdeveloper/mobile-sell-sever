@@ -53,4 +53,9 @@ export class MobileDto {
   inTheBox: [];
   imgUrl: string;
   model_id: string;
+
+  identifier: string;
+  positioning: string;
+  frontVideo: string;
+  mainVideo: string;
 }
