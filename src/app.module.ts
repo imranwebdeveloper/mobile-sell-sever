@@ -13,6 +13,7 @@ import { UtilsModule } from './common/modules/utils.module';
 import { UploadModule } from './common/modules/upload.module';
 import { ApiKeyAuthGuard } from './common/guards/ApiKeyAuth.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { AxiosModule } from './common/modules/Axios.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { JwtModule } from '@nestjs/jwt';
       }),
     }),
     MongooseModule.forRoot(process.env.DB),
+    AxiosModule,
     MobileModule,
     UsersModule,
     AuthModule,
