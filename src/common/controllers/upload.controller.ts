@@ -5,6 +5,7 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
+  Body,
 } from '@nestjs/common';
 import { UtilsService } from '../providers/utils.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -13,10 +14,14 @@ import * as CSV from 'csvtojson';
 import { CSVMobileFormat } from '../interfaces/CSV';
 import { mobileState } from '../schema/mobileModel';
 import { MobileDto } from '../dtos/create-mobile.dto';
+import { UploadService } from '../providers/upload.service';
 
 @Controller('upload')
 export class UploadController {
-  constructor(private utilsService: UtilsService) {}
+  constructor(
+    private utilsService: UtilsService,
+    private uploadService: UploadService,
+  ) {}
 
   @Post('mobile')
   @UseInterceptors(FileInterceptor('file'))
@@ -73,5 +78,11 @@ export class UploadController {
     });
 
     return { message: 'success', data: { ...mobileState, ...data } };
+  }
+
+  @Post('scraping')
+  async saveNewMobileInfo(@Body() body: any) {
+    const data = await this.uploadService.saveNewMobileInfo(body);
+    return data;
   }
 }

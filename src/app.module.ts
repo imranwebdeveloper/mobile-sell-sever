@@ -39,10 +39,10 @@ import { AxiosModule } from './common/modules/Axios.module';
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
-    {
-      provide: APP_GUARD,
-      useClass: ApiKeyAuthGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ApiKeyAuthGuard,
+    // },
   ],
 })
 export class AppModule {}

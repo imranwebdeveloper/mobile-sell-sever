@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { Document } from 'mongoose';
 
 export type MobileDocument = HydratedDocument<Mobile>;
 
@@ -108,3 +109,52 @@ export class Mobile {
 }
 
 export const MobileSchema = SchemaFactory.createForClass(Mobile);
+
+export type MobileContent = HydratedDocument<Content>;
+
+@Schema({ timestamps: true })
+export class Content {
+  @Prop()
+  name: String;
+}
+
+export const MobileContentSchema = SchemaFactory.createForClass(Content);
+
+export type PhoneDocument = Phone & Document;
+
+@Schema()
+export class Phone {
+  @Prop({ required: true })
+  title: string;
+
+  @Prop({ required: true })
+  brand: string;
+
+  @Prop({ required: true })
+  model: string;
+
+  @Prop({ required: true })
+  model_id: string;
+
+  @Prop({ required: true })
+  category: string;
+
+  @Prop({ required: true })
+  variants: { ROM: number; RAM: number; price: number }[];
+
+  @Prop({ required: true })
+  status: string;
+
+  @Prop({ required: true })
+  approved: boolean;
+
+  @Prop({ required: true })
+  img_url: string;
+
+  @Prop({ required: true, type: Object })
+  content: {
+    [key: string]: any;
+  };
+}
+
+export const PhoneSchema = SchemaFactory.createForClass(Phone);
