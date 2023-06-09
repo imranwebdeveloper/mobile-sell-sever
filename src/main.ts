@@ -11,6 +11,7 @@ async function bootstrap() {
   app.enableCors();
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
+  app.setGlobalPrefix('api');
   const { firebase, storageBucket } = config();
 
   admin.initializeApp({

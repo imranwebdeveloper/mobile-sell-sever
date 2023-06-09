@@ -5,6 +5,7 @@ import { Content, MobileContent, Phone, PhoneDocument } from '../schema/mobile';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreatePhoneDto } from '../dtos/phone.dto';
+import { format, parse } from 'date-fns';
 
 @Injectable()
 export class UploadService {
@@ -16,9 +17,17 @@ export class UploadService {
 
   async saveNewMobileInfo(data: CreatePhoneDto) {
     try {
+      const parsedDate = parse(
+        data.content['Launch']['announced'],
+        'yyyy, MMMM dd',
+        new Date(),
+      );
+      data.releasedDate = new Date(parsedDate);
+
       if (data.content['Tests']) {
         delete data.content['Tests'];
       }
+
       const downloadImgBuffer = await this.axiosService.downloadImgFromInternet(
         data.img_url,
       );
@@ -32,7 +41,6 @@ export class UploadService {
 
       const doc = new this.phoneDocument(data);
       await doc.save();
-      console.log(doc.title);
       return doc.title;
     } catch (error) {
       console.log(error);

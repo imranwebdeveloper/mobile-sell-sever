@@ -1,4 +1,5 @@
 export class CreatePhoneDto {
+  releasedDate: any;
   title: string;
   brand: string;
   model: string;

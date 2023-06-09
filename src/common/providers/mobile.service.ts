@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Mobile, MobileDocument } from '../schema/mobile';
+import { Mobile, MobileDocument, Phone, PhoneDocument } from '../schema/mobile';
 import { MobileDto } from '../dtos/create-mobile.dto';
 import { VariantDto } from '../dtos/mobile-variant.dto';
 import { UtilsService } from './utils.service';
@@ -13,7 +13,8 @@ import { UtilsService } from './utils.service';
 @Injectable()
 export class MobileService {
   constructor(
-    @InjectModel(Mobile.name) private mobileModel: Model<MobileDocument>,
+    @InjectModel(Phone.name) private mobileModel: Model<PhoneDocument>,
+
     private utilsService: UtilsService,
   ) {}
 
@@ -22,10 +23,10 @@ export class MobileService {
       const doc = await this.mobileModel
         .find({})
         .select([
-          'brandName',
+          'brand',
           'model',
-          'imgUrl',
-          'variant',
+          'img_url',
+          'variants',
           'updatedAt',
           'model_id',
         ]);
@@ -47,10 +48,10 @@ export class MobileService {
       .skip(skip)
       .sort({ releasedDate: 'desc' })
       .select([
-        'brandName',
+        'brand',
         'model',
-        'imgUrl',
-        'variant',
+        'img_url',
+        'variants',
         'updatedAt',
         'model_id',
       ]);
@@ -77,10 +78,10 @@ export class MobileService {
         .skip(skip)
         .sort({ releasedDate: 'desc' })
         .select([
-          'brandName',
+          'brand',
           'model',
-          'imgUrl',
-          'variant',
+          'img_url',
+          'variants',
           'updatedAt',
           'model_id',
         ]);
@@ -129,10 +130,10 @@ export class MobileService {
         .skip(skip)
         .sort({ updatedAt: 'desc' })
         .select([
-          'brandName',
+          'brand',
           'model',
-          'imgUrl',
-          'variant',
+          'img_url',
+          'variants',
           'updatedAt',
           'model_id',
         ]);
@@ -177,9 +178,8 @@ export class MobileService {
   ) {
     try {
       const curser = {
-        brandName: { $regex: new RegExp('\\b' + name + '\\b', 'i') },
+        brand: { $regex: new RegExp('\\b' + name + '\\b', 'i') },
       };
-
       const currentPage = Number(pageNumber) || 1;
       const limit = Number(perPage) || 12;
       const skip = limit * (currentPage - 1);
@@ -190,10 +190,10 @@ export class MobileService {
         .skip(skip)
         .sort({ releasedDate: 'desc' })
         .select([
-          'brandName',
+          'brand',
           'model',
-          'imgUrl',
-          'variant',
+          'img_url',
+          'variants',
           'updatedAt',
           'model_id',
         ]);

@@ -122,8 +122,10 @@ export const MobileContentSchema = SchemaFactory.createForClass(Content);
 
 export type PhoneDocument = Phone & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Phone {
+  @Prop()
+  releasedDate: Date;
   @Prop({ required: true })
   title: string;
 
