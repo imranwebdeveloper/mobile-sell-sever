@@ -27,7 +27,11 @@ export class UploadService {
       if (data.content['Tests']) {
         delete data.content['Tests'];
       }
-
+      if (data.content['Misc']) {
+        data.content['Misc'] = {
+          Colors: data.content['Misc']['Colors'],
+        };
+      }
       const downloadImgBuffer = await this.axiosService.downloadImgFromInternet(
         data.img_url,
       );
