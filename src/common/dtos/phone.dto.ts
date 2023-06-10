@@ -5,7 +5,12 @@ export class CreatePhoneDto {
   model: string;
   model_id: string;
   category: string;
-  variants: { ROM: number; RAM: number; price: number }[];
+  variants: {
+    ROM: number;
+    RAM: number;
+    official: number;
+    unofficial: number;
+  }[];
   status: string;
   approved: boolean;
   img_url: string;

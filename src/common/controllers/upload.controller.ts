@@ -82,6 +82,7 @@ export class UploadController {
 
   @Post('scraping')
   async saveNewMobileInfo(@Body() body: any) {
+    console.log(body.title);
     const data = await this.uploadService.saveNewMobileInfo(body);
     return data;
   }

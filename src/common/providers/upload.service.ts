@@ -18,7 +18,7 @@ export class UploadService {
   async saveNewMobileInfo(data: CreatePhoneDto) {
     try {
       const parsedDate = parse(
-        data.content['Launch']['announced'],
+        data.content['Launch']['Announced'],
         'yyyy, MMMM dd',
         new Date(),
       );
@@ -43,7 +43,11 @@ export class UploadService {
       await doc.save();
       return doc.title;
     } catch (error) {
-      console.log(error);
+      console.log(data.content['Launch']['Announced']);
+      console.log(error.message);
     }
   }
 }
+
+// Samsung Galaxy A13 (SM-A137)
+// 2022, June

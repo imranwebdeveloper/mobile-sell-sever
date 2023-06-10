@@ -135,14 +135,19 @@ export class Phone {
   @Prop({ required: true })
   model: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   model_id: string;
 
   @Prop({ required: true })
   category: string;
 
   @Prop({ required: true })
-  variants: { ROM: number; RAM: number; price: number }[];
+  variants: {
+    ROM: number;
+    RAM: number;
+    official: number;
+    unofficial: number;
+  }[];
 
   @Prop({ required: true })
   status: string;
